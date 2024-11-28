@@ -1,2 +1,7 @@
 data/rtdetrv2_pytorch/configs/dataset/coco/
 data/rtdetrv2_pytorch/configs/dataset/dataset/
+data/rtdetrv2_pytorch/*.pth
+data/rtdetrv2_pytorch/output/
+data/rtdetrv2_pytorch/*.jpg
+data/rtdetrv2_pytorch/*.png
+data/rtdetrv2_pytorch/*.mp4
