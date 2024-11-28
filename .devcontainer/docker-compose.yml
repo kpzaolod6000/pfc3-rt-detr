@@ -1,0 +1,23 @@
+services:
+  pytorch-nvcc-service:
+    #container_name: cuda-nvcc-container
+    image: nvcr.io/nvidia/pytorch:24.04-py3
+    build: .
+    ipc: host
+    ports:
+      - 8888:8888   
+    volumes:
+      - ../data:/home/pytorch/data
+    # user: root
+    #stdin_open: true 
+    #tty: true
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    command: sleep infinity

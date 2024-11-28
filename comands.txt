@@ -1,0 +1,1 @@
+	python rtdetrv2_torch.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml -rrtdetrv2_r18vd_120e_coco_rerun_48.1.pth -f carfoogy.png -d cuda

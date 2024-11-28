@@ -1,0 +1,19 @@
+{
+  "name": "Pytorch-DEVcontainer",
+  // The order of the files is important since later files override previous ones
+  //"image": "demo:focal",
+  "dockerComposeFile": ["docker-compose.yml"],
+
+  "service": "pytorch-nvcc-service",
+  "workspaceFolder": "/home/pytorch/data",
+
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": ["ms-python.python", "ms-python.vscode-pylance", "ms-toolsai.jupyter", "ms-vscode.cpptools"]
+    }
+  },
+
+  //"postCreateCommand": "bash",
+  "shutdownAction": "stopCompose"
+}
