@@ -11,6 +11,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 from src.core import YAMLConfig
 import cv2
+import time
 
 import AOD.net as net
 
@@ -18,20 +19,17 @@ def draw(images, labels, boxes, scores, threshold=0.5): #0.6
     for i, image in enumerate(images):
         draw = ImageDraw.Draw(image)
 
-        # Filtrar por umbral
         score = scores[i]
         label = labels[i][score > threshold]
         box = boxes[i][score > threshold]
         filtered_scores = scores[i][score > threshold]
 
-        # Imprimir etiquetas para depuración
         print(f"Imagen {i}:")
         print(f"Etiquetas filtradas: {label}")
         print(f"Puntuaciones filtradas: {filtered_scores}")
 
-        # Dibujar rectángulos y etiquetas
         for j, b in enumerate(box):
-            print(f"Etiquetas filtradas: {label[j].item()}")
+            # print(f"Etiquetas filtradas: {label[j].item()}")
             draw.rectangle(list(b), outline='red')
             # draw.text((b[0], b[1]), text=f"{label[j].item()} {round(filtered_scores[j].item(), 2)}", fill='blue')
             draw.text((b[0], b[1]-10), text=f"GUN {round(filtered_scores[j].item(), 2)}", fill='blue')
@@ -87,30 +85,35 @@ def main(args, ):
     dehaze_net = net.dehaze_net().cuda()
     dehaze_net.load_state_dict(torch.load('AOD/dehazer.pth'))
 
-    # Ruta del video
+    # path
     video_path = 'output_light_haze.mp4'
 
-    # Crear un objeto VideoCapture
     cap = cv2.VideoCapture(video_path)
 
-    # Verificar si el video se abrió correctamente
     if not cap.isOpened():
         print("Error al abrir el video")
         exit()
 
-    # Leer frames en un bucle
-    while True:
-        # Capturar frame por frame
-        ret, frame = cap.read()
-    
-         # Convertir el frame de OpenCV (BGR) a PIL (RGB)
-        im_pil = Image.fromarray(frame)
+  
+    frame_count = 0
+    accumulated_time = 0  # slaped time en milisegundos
+    fps_calculations = []  
 
-        # Convertir a RGB explícitamente si no estás seguro del formato
-        # im_pil = im_pil.convert('RGB')
+    # read frame
+    while True:
+        start_frame_time = time.time()
+        ret, frame = cap.read()
+        if not ret:
+            print("No se pueden leer más frames. Finalizando...")
+            break
+
+        im_pil = Image.fromarray(frame)
         
+        # change to RGB
+        # im_pil = im_pil.convert('RGB')
+
         im_pil = dehaze_image(im_pil, dehaze_net)
-    
+        
         w, h = im_pil.size
         orig_size = torch.tensor([w, h])[None].to(args.device)
 
@@ -125,21 +128,32 @@ def main(args, ):
 
         draw([im_pil], labels, boxes, scores)
         
-        # Si no quedan más frames, salir del bucle
-        if not ret:
-            print("No se pueden leer más frames. Finalizando...")
-            break
-
-        # Mostrar el frame actual
         frame_bgr = cv2.cvtColor(np.array(im_pil), cv2.COLOR_BGR2RGB)
-
-        # Mostrar el frame procesado
         cv2.imshow('Frame', np.array(im_pil))
-        # Salir con la tecla 'q'
+
+        end_frame_time = time.time()
+
+        frame_time_ms = (end_frame_time - start_frame_time) * 1000
+        accumulated_time += frame_time_ms
+        frame_count += 1 
+
+        # calculate FPS every 1 second
+        if accumulated_time >= 1000:  
+            fps_current = frame_count
+            fps_calculations.append(fps_current)
+            print(f"FPS: {fps_current} (frames procesados en 1 segundo)")
+            frame_count = 0
+            accumulated_time = 0
+
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
 
-    # Liberar el objeto VideoCapture y cerrar ventanas
+    print("\FPS guardados: ",fps_calculations )
+    total_fps = sum(fps_calculations)
+    average_fps = total_fps / len(fps_calculations) if fps_calculations else 0
+
+    print(f"\nPromedio total de FPS: {average_fps:.2f}")
+
     cap.release()
     cv2.destroyAllWindows()
 
