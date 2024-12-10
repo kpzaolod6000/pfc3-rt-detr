@@ -19,7 +19,7 @@ PResNet:
   depth: 50
   variant: d
   freeze_at: 0
-  return_idx: [1, 2, 3]
+  return_idx: [0, 1, 2, 3] # multi-layer pyramid [1, 2, 3]
   num_stages: 4
   freeze_norm: True
   pretrained: True 
@@ -27,11 +27,11 @@ PResNet:
 
 HybridEncoder:
   in_channels: [512, 1024, 2048]
-  feat_strides: [8, 16, 32]
+  feat_strides: [4, 8, 16, 32] #[8, 16, 32]
 
   # intra
   hidden_dim: 256
-  use_encoder_idx: [2]
+  use_encoder_idx: [3]
   num_encoder_layers: 1
   nhead: 8
   dim_feedforward: 1024
@@ -45,10 +45,10 @@ HybridEncoder:
 
 
 RTDETRTransformerv2:
-  feat_channels: [256, 256, 256]
-  feat_strides: [8, 16, 32]
+  feat_channels: [256, 256, 256, 256]
+  feat_strides: [4, 8, 16, 32] #[8, 16, 32]
   hidden_dim: 256
-  num_levels: 3
+  num_levels: 4 # 3
 
   num_layers: 6
   num_queries: 300
@@ -60,7 +60,7 @@ RTDETRTransformerv2:
   eval_idx: -1
 
   # NEW
-  num_points: [4, 4, 4] # [3,3,3] [2,2,2]
+  num_points: [4, 4, 4, 4] # [3,3,3] [2,2,2] # [4,4,4]
   cross_attn_method: default # default, discrete
   query_select_method: default # default, agnostic 
 

@@ -60,7 +60,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
             optimizer.zero_grad()
 
         else:
-            outputs = model(samples, targets=targets)
+            outputs = model(samples, targets=targets) # begin to model forward
             loss_dict = criterion(outputs, targets, **metas)
             
             loss : torch.Tensor = sum(loss_dict.values())

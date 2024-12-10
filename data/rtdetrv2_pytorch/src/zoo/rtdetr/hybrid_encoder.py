@@ -184,8 +184,8 @@ class HybridEncoder(nn.Module):
     __share__ = ['eval_spatial_size', ]
 
     def __init__(self,
-                 in_channels=[512, 1024, 2048],
-                 feat_strides=[8, 16, 32],
+                 in_channels=[512, 1024, 2048], # from file .yml [128,256,512]
+                 feat_strides=[8, 16, 32], # [8, 16, 32]
                  hidden_dim=256,
                  nhead=8,
                  dim_feedforward = 1024,
@@ -309,22 +309,55 @@ class HybridEncoder(nn.Module):
                 proj_feats[enc_ind] = memory.permute(0, 2, 1).reshape(-1, self.hidden_dim, h, w).contiguous()
 
         # broadcasting and fusion
-        inner_outs = [proj_feats[-1]]
+        # inner_outs = [proj_feats[-1]]
+        # for idx in range(len(self.in_channels) - 1, 0, -1):
+        #     feat_heigh = inner_outs[0]
+        #     feat_low = proj_feats[idx - 1]
+        #     feat_heigh = self.lateral_convs[len(self.in_channels) - 1 - idx](feat_heigh)
+        #     inner_outs[0] = feat_heigh
+        #     upsample_feat = F.interpolate(feat_heigh, scale_factor=2., mode='nearest')
+        #     inner_out = self.fpn_blocks[len(self.in_channels)-1-idx](torch.concat([upsample_feat, feat_low], dim=1))
+        #     inner_outs.insert(0, inner_out)
+        
+        # broadcasting and fusion #BiFPN
+        inner_outs_h = [proj_feats[-1]]
+        inner_outs_l = [] 
         for idx in range(len(self.in_channels) - 1, 0, -1):
-            feat_heigh = inner_outs[0]
-            feat_low = proj_feats[idx - 1]
-            feat_heigh = self.lateral_convs[len(self.in_channels) - 1 - idx](feat_heigh)
-            inner_outs[0] = feat_heigh
+            feat_heigh = inner_outs_h[0]
+            if (idx == len(self.in_channels) - 1):
+                feat_heigh = self.lateral_convs[len(self.in_channels) - 1 - idx](feat_heigh) # saved for next layer (blue)
+                # feat_heigh_l = self.lateral_convs[len(self.in_channels) - 1 - idx](proj_feats[idx]) # saved for next layer (blue)
+                inner_outs_l.insert(0, feat_heigh)
             upsample_feat = F.interpolate(feat_heigh, scale_factor=2., mode='nearest')
-            inner_out = self.fpn_blocks[len(self.in_channels)-1-idx](torch.concat([upsample_feat, feat_low], dim=1))
-            inner_outs.insert(0, inner_out)
+            
+            feat_low = proj_feats[idx - 1]
+            feat_low = self.lateral_convs[len(self.in_channels) - 1 - idx](feat_low) # saved for next layer (blue)
+            if (idx > 1):
+                inner_outs_l.insert(0, feat_low)
 
-        outs = [inner_outs[0]]
+            inner_outs_h[0]  = feat_heigh
+            
+            inner_out = self.fpn_blocks[len(self.in_channels)-1-idx](torch.concat([upsample_feat, feat_low], dim=1))
+            inner_outs_h.insert(0, inner_out)
+            
+        # outs = [inner_outs_h[0]]
+        # for idx in range(len(self.in_channels) - 1):
+        #     feat_low = outs[-1]
+        #     feat_height = inner_outs_h[idx + 1]
+        #     downsample_feat = self.downsample_convs[idx](feat_low)
+        #     out = self.pan_blocks[idx](torch.concat([downsample_feat, feat_height], dim=1))
+        #     outs.append(out)
+
+        outs = [inner_outs_h[0]]
         for idx in range(len(self.in_channels) - 1):
             feat_low = outs[-1]
-            feat_height = inner_outs[idx + 1]
+            feat_height = inner_outs_h[idx + 1]
             downsample_feat = self.downsample_convs[idx](feat_low)
-            out = self.pan_blocks[idx](torch.concat([downsample_feat, feat_height], dim=1))
+            if (idx >= 0 and idx < len(self.in_channels)-2):
+                out = self.pan_blocks[idx](torch.concat([downsample_feat, feat_height], dim=1))
+                out = self.pan_blocks[idx](torch.concat([out, inner_outs_l[idx]], dim=1))
+            else:
+                out = self.pan_blocks[idx](torch.concat([downsample_feat, inner_outs_l[idx]], dim=1))
             outs.append(out)
 
         return outs

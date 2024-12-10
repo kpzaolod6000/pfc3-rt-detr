@@ -21,6 +21,18 @@
                 "--config", "${workspaceFolder}/rtdetrv2_pytorch/configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml",
                 "--resume", "${workspaceFolder}/rtdetrv2_pytorch/output/rtdetrv2_r18vd_120e_coco/checkpoint0007.pth"
             ]
+        },
+        {
+            "name": "Python: Debug train",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/rtdetrv2_pytorch/tools/train.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config", "${workspaceFolder}/rtdetrv2_pytorch/configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml",
+                // "--resume", "${workspaceFolder}/rtdetrv2_pytorch/checkpoint0006.pth"
+            ]
         }
+
     ]
 }
