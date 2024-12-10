@@ -5,3 +5,5 @@ data/rtdetrv2_pytorch/output/
 data/rtdetrv2_pytorch/*.jpg
 data/rtdetrv2_pytorch/*.png
 data/rtdetrv2_pytorch/*.mp4
+data/rtdetrv2_pytorch/coco_test_2017/
+data/rtdetrv2_pytorch/val2017/
