@@ -35,7 +35,7 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/val2017
+    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/val2017/
     ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_val2017.json
     return_masks: False
     transforms:

@@ -35,7 +35,7 @@ def draw(images, labels, boxes, scores, threshold=0.5): #0.6
             draw.text((b[0], b[1]-10), text=f"GUN {round(filtered_scores[j].item(), 2)}", fill='blue')
 
         # Guardar la imagen anotada
-        image.save(f'results_{i}.jpg')
+        # image.save(f'results_{i}.jpg')
 
 
 def dehaze_image(image_path, dehaze_net):
