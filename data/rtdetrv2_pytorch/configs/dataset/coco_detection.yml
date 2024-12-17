@@ -10,7 +10,7 @@ evaluator:
 # num_classes: 91
 # remap_mscoco_category: False
 
-num_classes: 1
+num_classes: 80
 remap_mscoco_category: True
 
 
@@ -35,8 +35,8 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/val2017/
-    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_val2017.json
+    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/results_medium_dehazed
+    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/annotations/instances_val2017.json
     return_masks: False
     transforms:
       type: Compose
