@@ -13,3 +13,5 @@ inference: python rtdetrv2_torch.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco
 
 commands with tensorRT
 python references/deploy/rtdetrv2_tensorrt.py --trt-file=rtdetr_r18_static_fp16_model_1.trt --im-file=gun1.png
+python tools/export_onnx.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml -r 
+best.pth --check

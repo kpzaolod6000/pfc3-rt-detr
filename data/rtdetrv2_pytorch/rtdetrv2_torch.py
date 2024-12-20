@@ -60,7 +60,7 @@ def main(args, ):
     model = Model().to(args.device)
 
     # Ruta del video
-    video_path = 'YOUTUBE_YouTubeCCTV018_gun_2.mp4'
+    video_path = 'YOUTUBE_YouTubeCCTV009_gun_1.mp4'
 
     # Crear un objeto VideoCapture
     cap = cv2.VideoCapture(video_path)

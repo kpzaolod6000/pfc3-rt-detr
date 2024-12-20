@@ -18,8 +18,8 @@ train_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/train2017/
-    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_train2017.json
+    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/train2024/
+    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_train2024.json
     return_masks: False
     transforms:
       type: Compose
@@ -35,8 +35,8 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/val2017
-    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_val2017.json
+    img_folder: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/val2024
+    ann_file: /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/coco/annotations/instances_val2024.json
     return_masks: False
     transforms:
       type: Compose
