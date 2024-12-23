@@ -5,8 +5,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 USER root
 ### El UID y GID del host deben ser los mismos que el user del contenedor para tener los mismos permisos
-# RUN groupadd --gid 1001 pytorch-group && \
-    # useradd -rm -d /home/pytorch -s /bin/bash -g pytorch-group -u 1000 pytorch
+#RUN groupadd --gid 1001 pytorch-group && \
+#     useradd -rm -d /home/pytorch -s /bin/bash -g pytorch-group -u 1000 pytorch
 
 
 RUN apt-get update

@@ -6,6 +6,8 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 import AOD.net as net
+import argparse
+
 
 def load_model(model_path):
     dehaze_net = net.dehaze_net().cuda()
@@ -28,7 +30,6 @@ def dehaze_image(model, image_path, output_folder):
     print(f"{image_path} -> {output_path} (done)")
 
 def main(input_folder, output_folder, model_path):
-    
     model = load_model(model_path)
     os.makedirs(output_folder, exist_ok=True)
 
@@ -37,8 +38,10 @@ def main(input_folder, output_folder, model_path):
         dehaze_image(model, image_path, output_folder)
 
 if __name__ == '__main__':
-    input_folder = "/home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/light_haze"
-    output_folder = "/home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/results_light_dehazed"
-    model_path = "/home/pytorch/data/rtdetrv2_pytorch/AOD/dehazer.pth"
+    parser = argparse.ArgumentParser(description="Dehaze images using a pre-trained model.")
+    parser.add_argument("input_folder", type=str, help="Path to the folder containing hazy images.")
+    parser.add_argument("output_folder", type=str, help="Path to the folder where dehazed images will be saved.")
+    parser.add_argument("model_path", type=str, help="Path to the pre-trained model (.pth file).")
+    args = parser.parse_args()
 
-    main(input_folder, output_folder, model_path)
+    main(args.input_folder, args.output_folder, args.model_path)

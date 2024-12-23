@@ -86,7 +86,7 @@ def main(args, ):
     dehaze_net.load_state_dict(torch.load('AOD/dehazer.pth'))
 
     # path
-    video_path = 'output_light_haze.mp4'
+    video_path = '/home/pytorch/data/rtdetrv2_pytorch/output_heavy_haze.mp4'
 
     cap = cv2.VideoCapture(video_path)
 
