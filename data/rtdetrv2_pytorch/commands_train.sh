@@ -15,3 +15,8 @@ inference: python rtdetrv2_torch.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco
 python references/deploy/rtdetrv2_tensorrt.py --trt-file=rtdetr_r18_static_fp16_model_1.trt --im-file=gun1.png
 python tools/export_onnx.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml -r 
 best.pth --check
+
+#commands to add haze
+python dehaze_aod.py --input_dir /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/light_haze --model_path /home/pytorch/data/rtdetrv2_pytorch/pths/snapshots/NYU/MS_SSIM_L2_G/dehazer_final.pth --output_dir /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/dehaze_light_msssim_l2
+# PAOD
+python dehaze_paod.py --input_dir /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/medium_haze --model_path /home/pytorch/data/rtdetrv2_pytorch/pths/snapshots/NYU/PAOD_MS_SSIM_L2_G/dehazer_final.pth --output_dir /home/pytorch/data/rtdetrv2_pytorch/configs/dataset/dataset/coco/results_coco/dehaze_medium_paod_msssim_l2
