@@ -15,3 +15,10 @@ inference: python rtdetrv2_torch.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco
 python references/deploy/rtdetrv2_tensorrt.py --trt-file=rtdetr_r18_static_fp16_model_1.trt --im-file=gun1.png
 python tools/export_onnx.py -c configs/rtdetrv2/rtdetrv2_r18vd_120e_coco.yml -r 
 best.pth --check
+
+#PAOD ONNX
+python /home/pytorch/data/rtdetrv2_pytorch/AOD/export_onnx.py --resume pths/snapshots/NYU/PAOD_MS_SSIM_L2_G/dehazer_final.pth --output_file /home/pytorch/data/rtdetrv2_pytorch/AOD/model_paod.onnx --check
+
+
+#PAOD
+python references/deploy/rtdetrv2_tensorrt.py --trt-file=rtdetr_r18_static_bifpn__fp16.trt --dehaze-weights=/home/pytorch/data/rtdetrv2_pytorch/AOD/paod_static_fp16.trt 
