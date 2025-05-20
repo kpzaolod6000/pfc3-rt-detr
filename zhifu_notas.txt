@@ -1,0 +1,11 @@
+	agregar dataset de zhifu en
+judal@Judal:~/Unsa/pfc3/RT-DETRV2$ du -h data/rtdetrv2_pytorch/configs/dataset/gun_dataset_other/
+335M    data/rtdetrv2_pytorch/configs/dataset/gun_dataset_other/train
+337M    data/rtdetrv2_pytorch/configs/dataset/gun_dataset_other/
+judal@Judal:~/Unsa/pfc3/RT-DETRV2$ du -h data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/
+13M     data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/annotations
+65M     data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/test
+2.1G    data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/train
+924M    data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/trainmitad_1
+1.1G    data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/trainmitad_2
+4.3G    data/rtdetrv2_pytorch/configs/dataset/gun-detection-ZHIFU/
